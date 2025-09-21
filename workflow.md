@@ -119,12 +119,39 @@ date: [当前日期]
 
 ---
 
-## 📁 文件保存
+## 📁 文件保存和命名
 
-文章生成后自动保存到对应目录：
+### 自动4P层级判断
+AI根据学习内容自动判断所属层级：
+- **Pattern层**：哲学思考、本质探索（如：AI记忆本质、认知机制）
+- **Protocol层**：交互设计、规范标准（如：对话设计、交互协议）
+- **Practice层**：方法流程、最佳实践（如：Prompt工程、工作流程）
+- **Products层**：工具使用、实操指南（如：ChatGPT使用、工具对比）
+
+### 文件命名规则
+```
+[4P层级]-[核心主题]-[文档类型]-[日期].md
+
+示例：
+pattern-ai记忆系统本质-explanation-20250121.md
+products-chatgpt使用指南-howto-20250121.md
+protocol-对话设计原理-explanation-20250121.md
+practice-prompt工程实践-reference-20250121.md
+```
+
+### 公众号标题建议
+```
+[4P层级] | [吸引标题]
+
+示例：
+Pattern | AI记忆系统：为什么RAG根本不够用？
+Products | ChatGPT使用指南：5个技巧让效率翻倍
+Protocol | 对话设计的底层逻辑，让AI真正理解你
+Practice | Prompt工程实战：从入门到精通
+```
+
+### 自动保存位置
 - Pattern层 → `content/01-pattern/`
-- Protocol层 → `content/02-protocol/`  
+- Protocol层 → `content/02-protocol/`
 - Practice层 → `content/03-practice/`
 - Products层 → `content/04-products/`
-
-文件名格式：`主题-类型-日期.md`
