@@ -1,42 +1,63 @@
-# AI学习项目 - 完整工作环境
+# AILearning - AI学习项目
 
-## 📋 项目概述
-一个月系统学习AI，基于deepractice的4P×Diátaxis×PSO×ISSUE方法论，产出30篇高质量公众号文章。
+## 🎯 项目简介
 
-## 🎯 项目目标
-- **学习目标**：系统掌握PromptX、AI底层原理
-- **输出目标**：每日1篇文章，一个月30篇
-- **策略**：求数量不求完美，建立个人AI知识体系
-
-## 📁 项目结构
-```
-公众号项目/
-├── 📋 README.md                # 项目总览
-├── 📋 AI-GUIDE.md              # AI协作主规范
-├── 📋 CONTENT-FRAMEWORK.md     # 内容框架规范
-├── 📋 PROJECT-CONTEXT.md       # 项目上下文
-├── 📁 templates/               # 模板库
-├── 📁 content/                 # 内容目录（4P结构）
-├── 📁 examples/                # 示例文档
-├── 📁 planning/                # 计划和进度
-└── 📁 resources/               # 参考资源
-```
+AILearning是一个**持续性AI学习项目**，通过系统化的学习路径和实践，建立完整的AI知识体系并产出高质量内容。
 
 ## 🚀 快速开始
-1. 阅读 `AI-GUIDE.md` 了解协作规范
-2. 查看 `CONTENT-FRAMEWORK.md` 理解内容框架
-3. 使用 `templates/` 中的模板开始写作
-4. 参考 `examples/` 中的示例文档
 
-## 📊 进度跟踪
-- [ ] 第1周：Products层（AI工具实战）
-- [ ] 第2周：Practice层（AI协作方法）
-- [ ] 第3周：Protocol层（AI交互设计）
-- [ ] 第4周：Pattern层（AI哲学思考）
+### 1. 了解学习框架
+- 查看 `guide.md` - 了解4P框架和协作规范
+- 查看 `schedule.md` - 了解学习计划和当前进度
 
-## 🔄 使用说明
-每次开始新的AI协作时，请说：
-"加载AI学习项目配置，按照AI-GUIDE.md和CONTENT-FRAMEWORK.md规范进行协作"
+### 2. 开始学习
+复制以下模板，开始与AI协作：
+
+```
+我正在进行AILearning项目，请按照以下规范协作：
+
+【项目背景】
+- 项目：持续AI学习，产出高质量内容
+- 方法论：4P×Diátaxis×PSO×ISSUE框架
+- 目标读者：对AI学习感兴趣的人
+- 质量原则：实用导向，立即可用
+
+【今日任务】
+- 层级：[Pattern/Protocol/Practice/Products]
+- 类型：[Tutorial/How-to/Explanation/Reference]
+- 主题：[具体主题描述]
+- 目标：[要解决的具体问题]
+
+请帮我进行结构化的内容设计和创作。
+```
+
+## 📚 学习路径（4P框架）
+
+1. **🧠 Pattern层** - AI哲学思考：建立理论基础
+2. **🔗 Protocol层** - AI交互设计：理解底层原理  
+3. **⚙️ Practice层** - AI协作方法：形成工作流程
+4. **🛠️ Products层** - AI工具实战：掌握具体应用
+
+## 🗂️ 项目结构
+
+```
+AILearning/
+├── README.md              # 项目说明（本文件）
+├── guide.md               # AI协作规范和方法论
+├── schedule.md            # 学习计划和进度跟踪
+└── content/               # 学习内容分层
+    ├── 01-pattern/        # AI哲学思考
+    ├── 02-protocol/       # AI交互设计
+    ├── 03-practice/       # AI协作方法
+    └── 04-products/       # AI工具实战
+```
+
+## ⚡ 使用说明
+
+1. **新手**：从Pattern层开始，建立理论基础
+2. **进阶**：根据实际需求，选择相应层级学习
+3. **实践**：使用ISSUE流程，与AI协作产出内容
+4. **持续**：根据AI发展和个人需求，持续更新
 
 ---
-*基于deepractice内容规范体系构建*
+*让AI成为你最好的学习伙伴！* 🤖✨
