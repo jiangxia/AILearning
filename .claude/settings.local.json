@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:docs.claude.com)",
+      "Bash(claude mcp get:*)",
+      "Bash(claude mcp:*)",
+      "mcp__promptx__action",
+      "WebFetch(domain:docs.deepractice.ai)",
+      "mcp__promptx__remember",
+      "mcp__promptx__toolx",
+      "mcp__promptx__discover",
+      "mcp__promptx__recall",
+      "Bash(tree:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
