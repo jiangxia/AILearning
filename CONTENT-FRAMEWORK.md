@@ -48,30 +48,30 @@ related_articles: ["相关文章链接"]
 ### 4P分层目录
 ```
 content/
-├── 01-products/                 # AI工具实战
+├── 01-pattern/                 # AI哲学思考
 │   ├── index.md                # 目录索引
-│   ├── chatgpt/                # ChatGPT相关
-│   ├── claude/                 # Claude相关
-│   ├── specialized-tools/      # 专业工具
-│   └── comparisons/           # 工具对比
-├── 02-practice/                # AI协作方法
-│   ├── index.md
-│   ├── prompt-engineering/     # Prompt工程
-│   ├── workflow-design/        # 工作流设计
-│   ├── collaboration-methods/  # 协作方法
-│   └── quality-control/       # 质量控制
-├── 03-protocol/                # AI交互设计
+│   ├── cognitive-theory/       # 认知理论
+│   ├── ethics-philosophy/      # 伦理哲学
+│   ├── future-thinking/        # 未来思考
+│   └── governance-insights/    # 治理启示
+├── 02-protocol/                # AI交互设计
 │   ├── index.md
 │   ├── interaction-patterns/   # 交互模式
 │   ├── communication-protocols/ # 通信协议
 │   ├── structure-design/       # 结构设计
 │   └── interface-standards/   # 接口标准
-└── 04-pattern/                 # AI哲学思考
+├── 03-practice/                # AI协作方法
+│   ├── index.md
+│   ├── prompt-engineering/     # Prompt工程
+│   ├── workflow-design/        # 工作流设计
+│   ├── collaboration-methods/  # 协作方法
+│   └── quality-control/       # 质量控制
+└── 04-products/                 # AI工具实战
     ├── index.md
-    ├── cognitive-theory/       # 认知理论
-    ├── ethics-philosophy/      # 伦理哲学
-    ├── future-thinking/        # 未来思考
-    └── governance-insights/    # 治理启示
+    ├── chatgpt/                # ChatGPT相关
+    ├── claude/                 # Claude相关
+    ├── specialized-tools/      # 专业工具
+    └── comparisons/           # 工具对比
 ```
 
 ### 文件命名规范
