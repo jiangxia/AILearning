@@ -6,30 +6,18 @@ AILearning是一个**持续性AI学习项目**，通过系统化的学习路径�
 
 ## 🚀 快速开始
 
-### 1. 了解学习框架
-- 查看 `guide.md` - 了解4P框架和协作规范
+### 1. 了解使用方法
+- 查看 `workflow.md` - 学习操作流程（重要！）
+- 查看 `guide.md` - 了解4P框架和协作规范  
 - 查看 `schedule.md` - 了解学习计划和当前进度
 
 ### 2. 开始学习
-复制以下模板，开始与AI协作：
-
+直接对AI说：
 ```
-我正在进行AILearning项目，请按照以下规范协作：
-
-【项目背景】
-- 项目：持续AI学习，产出高质量内容
-- 方法论：4P×Diátaxis×PSO×ISSUE框架
-- 目标读者：对AI学习感兴趣的人
-- 质量原则：实用导向，立即可用
-
-【今日任务】
-- 层级：[Pattern/Protocol/Practice/Products]
-- 类型：[Tutorial/How-to/Explanation/Reference]
-- 主题：[具体主题描述]
-- 目标：[要解决的具体问题]
-
-请帮我进行结构化的内容设计和创作。
+学习：[链接/问题/关键词]
 ```
+
+就这么简单！详细操作方法请查看 `workflow.md`。
 
 ## 📚 学习路径（4P框架）
 
@@ -43,6 +31,7 @@ AILearning是一个**持续性AI学习项目**，通过系统化的学习路径�
 ```
 AILearning/
 ├── README.md              # 项目说明（本文件）
+├── workflow.md            # 操作流程（必读）
 ├── guide.md               # AI协作规范和方法论
 ├── schedule.md            # 学习计划和进度跟踪
 └── content/               # 学习内容分层
