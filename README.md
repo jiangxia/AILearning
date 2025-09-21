@@ -1,4 +1,4 @@
-# 律师AI学习项目 - 完整工作环境
+# AI学习项目 - 完整工作环境
 
 ## 📋 项目概述
 一个月系统学习AI，基于deepractice的4P×Diátaxis×PSO×ISSUE方法论，产出30篇高质量公众号文章。
@@ -36,7 +36,7 @@
 
 ## 🔄 使用说明
 每次开始新的AI协作时，请说：
-"加载律师AI学习项目配置，按照AI-GUIDE.md和CONTENT-FRAMEWORK.md规范进行协作"
+"加载AI学习项目配置，按照AI-GUIDE.md和CONTENT-FRAMEWORK.md规范进行协作"
 
 ---
 *基于deepractice内容规范体系构建*

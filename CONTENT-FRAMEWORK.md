@@ -71,7 +71,7 @@ content/
     ├── cognitive-theory/       # 认知理论
     ├── ethics-philosophy/      # 伦理哲学
     ├── future-thinking/        # 未来思考
-    └── legal-implications/     # 法律启示
+    └── governance-insights/    # 治理启示
 ```
 
 ### 文件命名规范
