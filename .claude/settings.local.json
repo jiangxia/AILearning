@@ -13,7 +13,8 @@
       "Bash(tree:*)",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:www.bilibili.com)",
-      "Read(//Users/huangyanxiang/.claude/**)"
+      "Read(//Users/huangyanxiang/.claude/**)",
+      "WebSearch"
     ],
     "deny": [],
     "ask": []
