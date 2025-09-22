@@ -10,7 +10,10 @@
       "mcp__promptx__toolx",
       "mcp__promptx__discover",
       "mcp__promptx__recall",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:www.bilibili.com)",
+      "Read(//Users/huangyanxiang/.claude/**)"
     ],
     "deny": [],
     "ask": []
