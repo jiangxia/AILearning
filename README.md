@@ -1,4 +1,3 @@
-AIzaSyAU6hw8DQTDu8DmJYQi6Dcp-qljAAGdFuw
 # AILearning - AI学习项目
 
 ## 🎯 项目定位（PSO框架）
