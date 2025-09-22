@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎧 江夏世家第一章-语音阅读器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: #f8f9fa;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        
+        .controls {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-1px);
+        }
+        
+        .btn-active {
+            background: rgba(255,255,255,0.9);
+            color: #667eea;
+        }
+        
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .speed-control select {
+            padding: 8px 12px;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 14px;
+        }
+        
+        .progress-bar {
+            height: 4px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            flex: 1;
+            margin: 0 15px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: rgba(255,255,255,0.8);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+        
+        .status {
+            font-size: 14px;
+            opacity: 0.9;
+            min-width: 120px;
+            text-align: right;
+        }
+        
+        .content {
+            padding: 40px;
+            font-size: 16px;
+            line-height: 1.8;
+            color: #333;
+        }
+        
+        .segment {
+            margin-bottom: 1.5em;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .segment.current {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            margin: 0 -20px 1.5em -20px;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .controls {
+                padding: 15px;
+                gap: 10px;
+            }
+            
+            .content {
+                padding: 20px;
+                font-size: 15px;
+            }
+            
+            .progress-bar {
+                margin: 10px 0;
+                order: 10;
+                flex-basis: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <button class="btn" id="playBtn" onclick="togglePlay()">▶️ 播放</button>
+            <button class="btn" id="stopBtn" onclick="stopReading()">⏹️ 停止</button>
+            
+            <div class="speed-control">
+                <label>语速</label>
+                <select id="speedSelect" onchange="updateSpeed()">
+                    <option value="1.0">1x</option>
+                    <option value="2.0" selected>2x</option>
+                    <option value="3.0">3x</option>
+                    <option value="4.0">4x</option>
+                    <option value="5.0">5x</option>
+                </select>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            
+            <div class="status" id="status">准备播放</div>
+        </div>
+        
+        <div class="content" id="content">
+            <div class="segment" data-segment="0">2024年，上海。</div>
+            <div class="segment" data-segment="1">盛夏的暴雨，已经下了整整三天。</div>
+            <div class="segment" data-segment="2">天空被厚重的铅云压得密不透风，整座城市仿佛被浸泡在一个巨大的、冰冷的玻璃容器里。雨点疯狂地砸在陆家嘴金融大厦91层的幕墙玻璃上，汇成一道道浑浊的水流，扭曲了窗外东方明珠的倒影，也扭曲了黄兴国自己的脸。</div>
+            <div class="segment" data-segment="3">他已经在这里站了三个小时。</div>
+            <div class="segment" data-segment="4">身后，是他一手创办的芯片设计公司"乾景科技"。这里曾是他梦想的殿堂，办公室的每一寸空间，都倾注了他全部的心血。他记得每一个熬夜攻克技术难关的夜晚，记得每一次拿到融资后团队的欢呼，记得墙上那张大家在纳斯达克敲钟时的合影，每个人脸上都洋溢着不可一世的骄傲。</div>
+            <div class="segment" data-segment="5">而现在，办公室里一片狼藉。</div>
+            <div class="segment" data-segment="6">解约合同、律师函、竞对公司的挖角信像垃圾一样散落在冰冷的地板上。空气中弥漫着一股梦想破碎的味道，混杂着未干的雨水带来的潮湿霉气，刺鼻又令人窒息。</div>
+            <div class="segment" data-segment="7">几个小时前，他亲手栽培的团队核心，那个他视作左膀右臂的首席架构师，带着整个研发部门，连同他们最新的研发成果——一颗足以在AI芯片领域掀起滔天巨浪的SoC，集体跳槽到了美国竞争对手的公司。</div>
+            <div class="segment" data-segment="8">致命的背叛，叠加上史无前例的技术封锁，几乎在一瞬间就将乾景科技推向了万劫不复的深渊。</div>
+            <div class="segment" data-segment="9">"我们输了。"</div>
+            <div class="segment" data-segment="10">合伙人老刘在电话里那一声绝望的叹息，像一根毒刺，反复扎着黄兴国的耳膜。</div>
+            <div class="segment" data-segment="11">输了？怎么会输？</div>
+            <div class="segment" data-segment="12">黄兴国的内心在嘶吼。创业之初的誓言还言犹在耳："我们要做中国人自己的顶尖芯片，要让'乾景'这个名字，成为世界科技的巅峰！"可现实呢？现实是信任的崩塌，是理想被资本无情地绞杀。他想不通，为什么自己全心全意的付出，换来的却是釜底抽薪的背叛。这不仅仅是商业的失败，更是一种信念的坍塌。</div>
+            <div class="segment" data-segment="13">他拖着被掏空的身体，离开了那栋他曾仰望的摩天大楼。车子行驶在回家的路上，从陆家嘴到法租界，窗外的霓虹灯在雨幕中化开，变成一团团模糊而刺眼的光晕。</div>
+            <div class="segment" data-segment="14">车流堵在了延安路高架上，他烦躁地降下车窗，冰冷的雨丝夹着风灌了进来。放眼望去，远处是鳞次栉比的居民楼，窗户里透出温暖的、橘黄色的灯光。万家灯火，璀璨如星，却无一盏能照进他冰冷的心。</div>
+            <div class="segment" data-segment="15">"家……"这个字眼，像一根针，轻轻刺破了他麻木的神经。他忽然想起了父亲黄卫国。</div>
+            <div class="segment" data-segment="16">那是在乾景科技纳斯达克上市的庆功宴上，意气风发的他接受着所有人的祝贺。喧嚣散尽后，父亲却把他拉到一旁，递给他一杯茶，用一种异常平静的语气对他说："兴国，你今天站得有多高，将来就可能摔得有多重。记住，如果真有那么一天，你觉得走投无路了，别一个人硬扛。回家去，回你爷爷那栋老宅子去。你想要的答案，你需要的力量，都在那里。"</div>
+            <div class="segment" data-segment="17">当时的他，正值人生巅峰，对这番话不以为意，只当是父亲的杞人忧天。可此刻，这番话却像一道穿透迷雾的光，为他指明了唯一可能的方向。</div>
+            <div class="segment" data-segment="18">"师傅，改道，去武康路。"他用沙哑的声音对司机说。</div>
+            <div class="segment" data-segment="19">那座他曾无比热爱的城市，此刻依然陌生，但他的心里，却有了一个明确的目的地。</div>
+            <div class="segment" data-segment="20">推开老宅那扇沉重的木门，一股熟悉的、混杂着樟木与旧书的香气扑面而来，让他紧绷到几乎断裂的神经，终于有了一丝喘息的空隙。</div>
+            <div class="segment" data-segment="21">这里是祖父黄建国留下的唯一念想。</div>
+            <div class="segment" data-segment="22">他没有开灯，径直走上二楼的书房。这里的一切，都还保持着祖父在世时的模样。他借着窗外透进的微光，漫无目的地在书架上扫视着，像一个溺水的人，渴望抓住一根救命的稻草。</div>
+            <div class="segment" data-segment="23">最终，他的目光停留在了一本被摩挲得边角发白、用蓝色布面包裹的《易经》手稿上。</div>
+            <div class="segment" data-segment="24">这是祖父的亲笔手稿。他颤抖着手，轻轻翻开，一股陈旧的墨香混着时光的味道，瞬间将他包围。书页上，除了工整的蝇头小楷抄录的经文，还有大量用朱笔写下的批注。</div>
+            <div class="segment" data-segment="25">他的指尖，最终停在了开篇的"乾卦"上。</div>
+            <div class="segment" data-segment="26">"乾：元，亨，利，贞。"</div>
+            <div class="segment" data-segment="27">而在这行经文旁，一行苍劲有力的朱笔大字，如一道闪电，瞬间劈开了他内心的混沌与黑暗——</div>
+            <div class="segment" data-segment="28">"元亨利贞，国之四德也。"</div>
+            <div class="segment" data-segment="29">在这行大字之下，还有一段用小楷写下的、仿佛自问自答般的感悟：</div>
+            <div class="segment" data-segment="30">"国之初创，如乾之始。何为元？非兵强马壮，乃立德立心。何为亨？非政令通达，乃人心通达，育人百年。何为利？非一己之功名，乃文脉之存续。何为贞？非安享尊位，乃守正道，行难事。思之再三，大丈夫当为国养龙，而非争一时之功。舍参谋之职，投身教育，此为我之道，亦为国之贞也。"</div>
+            <div class="segment" data-segment="31">黄兴国的手指抚过那段文字，心脏仿佛被一只无形的手攥紧了。"为国养龙，而非争一时之功"……祖父在开国大典的喧嚣中，面对唾手可得的权位，竟然选择了放弃，去走一条最艰难、最寂寞的育人之路。而自己呢？在商业的战场上，自己追求的，不正是那"一时之功"吗？那座纳斯达克的奖杯，那份行业龙头的虚名……他汲汲于求的"乾景"，与祖父心中为国养的"潜龙"，何其相似，又何其不同！</div>
+            <div class="segment" data-segment="32">一股巨大的、混杂着羞愧与震撼的情感洪流，瞬间将他淹没。他终于明白，祖父留给他的，不是一本算命的书，而是一套安身立命的活法。他仿佛看到，在那个同样面临巨大抉择的秋日，祖父的身影与自己重叠在了一起。</div>
+            <div class="segment" data-segment="33">思绪，就此回到了那个改变一切的起点……</div>
+            <div class="segment" data-segment="34">1949年，秋，北平。</div>
+            <div class="segment" data-segment="35">整座城市都沉浸在开国大典的巨大喜悦之中。天安门广场上"中华人民共和国中央人民政府成立了"的洪亮宣告，通过收音机的电波，传遍了四九城的每一个角落。震天的锣鼓和欢呼声，从清晨起就未曾停歇，一直传到城西这处僻静的四合院里。</div>
+            <div class="segment" data-segment="36">院内，一个身着洗得发白的旧军装的挺拔身影，正独自坐在书房里，与窗外的喧嚣格格不入。</div>
+            <div class="segment" data-segment="37">他就是黄建国，一位刚刚从解放战争的硝烟中走出来的儒将。他的面前，静静地躺着一份由中央军委签发的任命状——华北军区高级参谋。这是一个足以让无数人艳羡的职位，一个对他赫赫战功的最高褒奖。凭借这份任命，他将拥有一个无比光明、平步青云的未来。</div>
+            <div class="segment" data-segment="38">然而，黄建国的脸上，没有一丝喜悦。他的目光深邃而平静，仿佛穿透了窗外的欢腾，望向了更遥远的历史深处。</div>
+            <div class="segment" data-segment="39">他在与自己的内心交战。</div>
+            <div class="segment" data-segment="40">一个声音在说："建国，你九死一生，为的不就是今天吗？天下太平，理应建功立业，不负此生。"</div>
+            <div class="segment" data-segment="41">另一个声音却在反问："功名利禄，真是你黄建国所求的吗？你所读的圣贤书，教给你的，难道只是博取个人功名？"</div>
+            <div class="segment" data-segment="42">突然，一个画面在他脑海中浮现。那是几个月前，在一个寂静的夜晚，他与李老对坐清谈。当时，李老曾抚着那本古旧的《易经》，语重心长地对他说："建国，乾卦的元、亨、利、贞，非是卜算之辞，而是天道之德，亦可是立国之本。元者，善之长也；亨者，嘉之会也；利者，义之和也；贞者，事之干也。此为国之四德。"</div>
+            <div class="segment" data-segment="43">这段记忆，如一道闪电，劈开了他心中的迷雾。他豁然开朗。他思考的，不再是个人前途的得失，而是一个新生国家的"元亨利贞"。</div>
+            <div class="segment" data-segment="44">他长长地舒了一口气，眼神变得无比清澈和坚定。他站起身，将那份滚烫的任命状，连同他过往的所有战功与荣耀，轻轻地、却又无比郑重地，放进了书桌最底层的木匣里，锁了起来。</div>
+            <div class="segment" data-segment="45">然后，他拿起另一张纸，饱蘸浓墨，写下了两个字：</div>
+            <div class="segment" data-segment="46">"教育。"</div>
+            <div class="segment" data-segment="47">他选择了一条路，一条为这个国家"养龙"的路。</div>
+            <div class="segment" data-segment="48">他知道，这个关乎家国命运的重大抉择，其深远意义，或许只有一人能够真正理解。他要去见李老，与这位思想的源头，印证自己的道路是否正确。</div>
+        </div>
+    </div>
+
+    <script>
+        const totalSegments = 49;
+        let currentSpeed = 2.0;
+        let currentIndex = 0;
+        let isPlaying = false;
+        let utterance = null;
+        
+        function updateStatus(message) {
+            document.getElementById('status').textContent = message;
+        }
+        
+        function updateProgress() {
+            const progress = totalSegments > 0 ? (currentIndex / totalSegments) * 100 : 0;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+        
+        function highlightSegment(index) {
+            document.querySelectorAll('.segment').forEach(el => el.classList.remove('current'));
+            const currentSegment = document.querySelector(`[data-segment="${index}"]`);
+            if (currentSegment) {
+                currentSegment.classList.add('current');
+                currentSegment.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+        
+        function updateSpeed() {
+            currentSpeed = parseFloat(document.getElementById('speedSelect').value);
+        }
+        
+        function togglePlay() {
+            if (isPlaying) {
+                pauseReading();
+            } else {
+                startReading();
+            }
+        }
+        
+        function startReading() {
+            if (!window.speechSynthesis) {
+                alert('浏览器不支持语音合成功能，请使用Chrome、Edge或Safari');
+                return;
+            }
+            
+            isPlaying = true;
+            document.getElementById('playBtn').innerHTML = '⏸️ 暂停';
+            document.getElementById('playBtn').classList.add('btn-active');
+            
+            readNext();
+        }
+        
+        function pauseReading() {
+            if (utterance) {
+                speechSynthesis.cancel();
+            }
+            isPlaying = false;
+            document.getElementById('playBtn').innerHTML = '▶️ 播放';
+            document.getElementById('playBtn').classList.remove('btn-active');
+            updateStatus('已暂停');
+        }
+        
+        function stopReading() {
+            speechSynthesis.cancel();
+            isPlaying = false;
+            currentIndex = 0;
+            document.getElementById('playBtn').innerHTML = '▶️ 播放';
+            document.getElementById('playBtn').classList.remove('btn-active');
+            updateProgress();
+            updateStatus('已停止');
+            document.querySelectorAll('.segment').forEach(el => el.classList.remove('current'));
+        }
+        
+        function readNext() {
+            if (!isPlaying || currentIndex >= totalSegments) {
+                if (currentIndex >= totalSegments) {
+                    updateStatus('播放完成');
+                    stopReading();
+                }
+                return;
+            }
+            
+            const currentSegment = document.querySelector(`[data-segment="${currentIndex}"]`);
+            if (!currentSegment) {
+                currentIndex++;
+                setTimeout(readNext, 100);
+                return;
+            }
+            
+            const text = currentSegment.textContent.trim();
+            
+            if (!text) {
+                currentIndex++;
+                setTimeout(readNext, 100);
+                return;
+            }
+            
+            updateStatus(`播放中 ${currentIndex + 1}/${totalSegments}`);
+            updateProgress();
+            highlightSegment(currentIndex);
+            
+            utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = currentSpeed;
+            utterance.lang = 'zh-CN';
+            utterance.volume = 1;
+            utterance.pitch = 1;
+            
+            const voices = speechSynthesis.getVoices();
+            const chineseVoice = voices.find(v => 
+                v.lang.includes('zh') || v.name.includes('Chinese') || v.name.includes('中')
+            );
+            if (chineseVoice) {
+                utterance.voice = chineseVoice;
+            }
+            
+            utterance.onend = () => {
+                if (isPlaying) {
+                    currentIndex++;
+                    setTimeout(readNext, 100);
+                }
+            };
+            
+            utterance.onerror = () => {
+                currentIndex++;
+                setTimeout(readNext, 100);
+            };
+            
+            speechSynthesis.speak(utterance);
+        }
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.code === 'Space' && e.target.tagName !== 'SELECT') {
+                e.preventDefault();
+                togglePlay();
+            }
+        });
+        
+        window.addEventListener('beforeunload', function() {
+            speechSynthesis.cancel();
+        });
+        
+        console.log('🎧 江夏世家第一章语音阅读器已就绪');
+    </script>
+</body>
+</html>
