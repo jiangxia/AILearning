@@ -1,3 +1,4 @@
+AIzaSyAU6hw8DQTDu8DmJYQi6Dcp-qljAAGdFuw
 # AILearning - AI学习项目
 
 ## 🎯 项目定位（PSO框架）
@@ -8,7 +9,7 @@
 ### Scope（范围）
 **包含 (includes):**
 - PromptX系统学习和应用
-- AI底层原理理解  
+- AI底层原理理解
 - AI工具和技术的深度探索
 - 基于deepractice方法论的内容生产
 
@@ -27,7 +28,7 @@
 
 ### 1. 了解使用方法
 - 查看 `workflow.md` - 学习操作流程（重要！）
-- 查看 `guide.md` - 了解4P框架和协作规范  
+- 查看 `guide.md` - 了解4P框架和协作规范
 - 查看 `schedule.md` - 了解学习计划和当前进度
 
 ### 2. 开始学习
@@ -90,7 +91,7 @@ AILearning/
 - **举例**：《ChatGPT完全入门教程》
 
 ### How-to（操作指南）
-- **用途**：读者有基础，要解决具体问题  
+- **用途**：读者有基础，要解决具体问题
 - **特点**：直奔主题，提供具体解决方案
 - **举例**：《如何用ChatGPT写出高质量报告》
 
@@ -117,7 +118,7 @@ AILearning/
 
 【今日任务】
 - 层级：[Pattern/Protocol/Practice/Products]
-- 类型：[Tutorial/How-to/Explanation/Reference]  
+- 类型：[Tutorial/How-to/Explanation/Reference]
 - 主题：[具体主题描述]
 - 目标：[要解决的具体问题]
 
