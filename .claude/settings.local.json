@@ -14,7 +14,8 @@
       "WebFetch(domain:github.com)",
       "WebFetch(domain:www.bilibili.com)",
       "Read(//Users/huangyanxiang/.claude/**)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(mv:*)"
     ],
     "deny": [],
     "ask": []
