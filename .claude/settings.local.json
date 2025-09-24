@@ -15,7 +15,9 @@
       "WebFetch(domain:www.bilibili.com)",
       "Read(//Users/huangyanxiang/.claude/**)",
       "WebSearch",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "Read(//Users/huangyanxiang/Desktop/黄明易/1、项目/开发/【小说】/**)",
+      "Read(//Users/huangyanxiang/Desktop/黄明易/1、项目/开发/【江夏世家】/**)"
     ],
     "deny": [],
     "ask": []
