@@ -22,7 +22,9 @@
       "Bash(gh issue comment:*)",
       "Bash(gh issue view:*)",
       "Read(//Users/huangyanxiang/Desktop/黄明易/1、项目/开发/jiangxia.github.io.git/share-007/**)",
-      "Bash(pandoc:*)"
+      "Bash(pandoc:*)",
+      "WebFetch(domain:www.anthropic.com)",
+      "WebFetch(domain:claude.com)"
     ],
     "deny": [],
     "ask": []
