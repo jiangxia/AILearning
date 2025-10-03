@@ -28,7 +28,9 @@
       "Bash(defaults read:*)",
       "Bash(scutil:*)",
       "Read(//Users/huangyanxiang/Library/**)",
-      "Bash(pkill:*)"
+      "Bash(pkill:*)",
+      "Bash(wc:*)",
+      "Read(///**)"
     ],
     "deny": [],
     "ask": []
