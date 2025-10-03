@@ -1,4 +1,4 @@
-# Pattern | Claude都出4.5了，你还不懂——它到底是什么
+# Pattern | Claude都出4.5了，你还不懂它到底是什么
 
 2025年9月29日，Anthropic发布了Claude Sonnet 4.5。
 
