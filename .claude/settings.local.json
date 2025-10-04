@@ -32,7 +32,9 @@
       "Bash(wc:*)",
       "Read(///**)",
       "WebFetch(domain:manual.sspai.com)",
-      "WebFetch(domain:sspai.com)"
+      "WebFetch(domain:sspai.com)",
+      "Read(//Users/huangyanxiang/.promptx/resource/tool/webpage-to-md/**)",
+      "mcp__promptx__project"
     ],
     "deny": [],
     "ask": []

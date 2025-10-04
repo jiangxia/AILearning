@@ -1,0 +1,31 @@
+{
+  "currentState": "initial",
+  "stateHistory": [
+    {
+      "from": "initial",
+      "command": "project",
+      "timestamp": "2025-10-04T14:12:18.876Z",
+      "args": [
+        {
+          "workingDirectory": "/Users/huangyanxiang/Desktop/黄明易/1、项目/开发/公众号",
+          "ideType": "claude"
+        }
+      ]
+    },
+    {
+      "from": "initial",
+      "command": "discover",
+      "timestamp": "2025-10-04T14:12:19.032Z",
+      "args": []
+    },
+    {
+      "from": "initial",
+      "command": "action",
+      "timestamp": "2025-10-04T14:12:26.138Z",
+      "args": [
+        "yanruyu"
+      ]
+    }
+  ],
+  "lastUpdated": "2025-10-04T14:12:26.175Z"
+}
