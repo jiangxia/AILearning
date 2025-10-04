@@ -34,7 +34,8 @@
       "WebFetch(domain:manual.sspai.com)",
       "WebFetch(domain:sspai.com)",
       "Read(//Users/huangyanxiang/.promptx/resource/tool/webpage-to-md/**)",
-      "mcp__promptx__project"
+      "mcp__promptx__project",
+      "Bash(mkdir:*)"
     ],
     "deny": [],
     "ask": []
