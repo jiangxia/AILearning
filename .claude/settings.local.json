@@ -35,7 +35,11 @@
       "WebFetch(domain:sspai.com)",
       "Read(//Users/huangyanxiang/.promptx/resource/tool/webpage-to-md/**)",
       "mcp__promptx__project",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Read(//Users/huangyanxiang/.promptx/resource/role/bangu/**)",
+      "Read(//Users/huangyanxiang/.promptx/resource/role/yanruyu/execution/**)",
+      "Read(//Users/huangyanxiang/.promptx/resource/role/yanruyu/**)",
+      "Read(//Users/huangyanxiang/Desktop/黄明易/1、项目/AI学习/promptx/packages/resource/resources/role/sean/**)"
     ],
     "deny": [],
     "ask": []
