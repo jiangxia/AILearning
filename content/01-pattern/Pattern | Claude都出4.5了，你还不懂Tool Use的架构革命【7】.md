@@ -129,6 +129,8 @@ Claude不需要你主动跟他说查找哪个文件，他会根据上下文的�
 
 不过目前Claude的准确率只有14.9%，GPT-4是7.7%。这个技术的潜力还是很大。
 
+大家对Computer Use感兴趣的，可以看看官方文档：https://docs.claude.com/en/docs/build-with-claude/computer-use。
+
 ---
 
 ## 快速解答
