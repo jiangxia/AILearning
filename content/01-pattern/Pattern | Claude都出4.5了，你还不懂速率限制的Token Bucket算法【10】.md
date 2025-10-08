@@ -1,0 +1,206 @@
+# Pattern | Claude都出4.5了，你还不懂速率限制的Token Bucket算法
+
+上周五下午，我的API突然全挂了。所有请求都返回429错误，retry-after header显示要等2小时。我一脸懵，明明刚才还好好的，怎么突然就限流了？
+
+我打开Console查看，发现已经是Tier 1，RPM限制50次/分钟，ITPM限制40K。我算了下，刚才那批请求确实超了，但我不理解的是：为什么不是每分钟重置，而是要等2小时？
+
+后来研究文档才明白，Claude用的是Token Bucket算法，不是传统的固定时间窗口。这个设计很巧妙，但也让很多人摸不着头脑。
+
+我上网查了下，发现大家在吐槽类似的问题：
+
+1. Token Bucket算法到底怎么运作的？为什么不是每分钟重置？
+2. RPM、ITPM、OTPM三个限制怎么同时判断？哪个最容易超？
+3. 从Tier 1升到Tier 2要多久？只充值就行还是要等？
+4. 429错误的retry-after header为什么有时候准有时候不准？
+5. Prompt Caching的读取tokens不计入ITPM，这能帮我提升多少吞吐量？
+
+---
+
+## Token Bucket算法的运作原理
+
+我之前一直以为，速率限制就是"每分钟最多50次请求"，到下一分钟就重置。实际上Claude用的Token Bucket算法完全不是这么回事。
+
+### 持续补充的容量桶
+
+Token Bucket算法的核心是：你有一个容量桶，容量上限是你的速率限制（比如50 RPM）。每次请求消耗一个token，桶里的token会持续不断地补充，而不是到点重置。
+
+举个例子。假设你的RPM限制是50，那么你的桶每秒补充50/60≈0.83个token。
+
+如果你在第1秒发了10个请求，桶里剩40个token。到第2秒，桶补充了0.83个token，桶里有40.83个。到第61秒，桶已经补充满到50个了。
+
+这跟传统的固定窗口完全不同。固定窗口是：第1分钟用了10次，第2分钟重置，又能用50次。Token Bucket是：第1分钟用了10次，要等50秒才能完全恢复。
+
+### 为什么要用Token Bucket？
+
+你可能会问，为什么不用简单的固定窗口？
+
+Anthropic的设计考虑是**防止突发流量**。固定窗口有个问题，你可以在第59秒发50次请求，第1秒又发50次，实际上2秒内发了100次，这对服务器是巨大压力。
+
+Token Bucket不会有这个问题。你的桶容量就是50，无论什么时候，最多一次性发50次，然后就得等桶慢慢补充。
+
+这种设计对服务器友好，但对开发者不太友好，因为你不知道什么时候能恢复到满容量。
+
+### 三个独立的桶
+
+Claude的速率限制不是一个桶，而是三个独立的桶：RPM、ITPM、OTPM。
+
+**RPM（Requests Per Minute）**：请求数量限制。每次调用API，不管请求多大，都消耗1个RPM token。
+
+**ITPM（Input Tokens Per Minute）**：输入tokens限制。你的prompt有多少tokens，就消耗多少ITPM。
+
+**OTPM（Output Tokens Per Minute）**：输出tokens限制。Claude生成多少tokens，就消耗多少OTPM。
+
+三个桶各自独立计算，任何一个桶空了，请求就会被拒绝。
+
+实际使用中，ITPM和OTPM更容易超。比如Tier 1的Sonnet 3.5，RPM是50，但ITPM只有40K。如果你每个请求的prompt有2000 tokens，20个请求就用完40K ITPM了，RPM还剩30个没用。
+
+### Prompt Caching的特殊待遇
+
+从Claude 3.7 Sonnet开始，Anthropic做了一个关键优化：**Prompt Caching的读取tokens不计入ITPM限制**。
+
+假设你的prompt有10K tokens，其中8K是缓存的上下文，2K是新的查询。以前这10K都计入ITPM，现在只计入2K。
+
+如果你大量使用Prompt Caching，实际的ITPM限制相当于提升了好几倍。
+
+我之前因为ITPM不够，只能每分钟处理20个请求。现在80%的tokens走缓存，ITPM相当于提升5倍，每分钟能处理100个请求。
+
+不过有个前提：RPM限制得够。如果你还在Tier 1，RPM只有50，即使ITPM够用，也发不了100个请求。
+
+---
+
+## 四个Usage Tier的晋级机制
+
+Claude的速率限制按Usage Tier分级，从Tier 1到Tier 4，限制越来越宽松。
+
+Tier 1的门槛是充值$5，限制是50 RPM，20K-50K ITPM（根据模型不同），4K-10K OTPM。
+
+这个限制对小规模应用够用。如果你只是做个原型，或者流量很小的服务，Tier 1能撑住。但如果你要做批量处理，或者有一定流量的产品，Tier 1很快就不够用了。
+
+我当时就卡在这里。每分钟50个请求，听起来不少，但我要批量分析用户反馈，5000条数据要跑100分钟。而且ITPM只有40K，每个请求平均2K tokens，实际每分钟只能发20个，250分钟才能跑完。
+
+Tier 2的门槛是充值$40，并且保持余额至少7天。限制提升到1000 RPM，40K-100K ITPM，8K-20K OTPM。
+
+这个提升很明显。RPM从50涨到1000，20倍提升。ITPM也翻倍了。
+
+关键是那个"保持余额至少7天"。你不能今天充$40，明天就升Tier 2。要连续7天余额不低于$40，系统才会自动升级。这个设计是为了防止刷等级，你不能充值→升级→用完→充值，必须保持一定的消费水平。
+
+Tier 3要充$200保持7-14天，Tier 4要充$400。具体的限制官方文档有详细表格，但核心逻辑是一样的：充值额度越高，限制越宽松。
+
+Tier 4基本上是"随便用"的级别了，除非你的应用真的特别大，否则很难打满Tier 4的限制。
+
+另外还有个容易被忽略的限制：**每个Tier都有月度消费上限**。达到上限后，就算你账户还有钱，也要等下个月才能继续用。
+
+这个设计是为了防止意外超支。比如你在Tier 1，月度上限可能是几百美元。如果你的代码出bug，陷入死循环疯狂调用API，到上限就会被强制停止，不会无限烧钱。
+
+---
+
+## 429错误的正确处理姿势
+
+429错误是所有API开发者的噩梦。Claude返回429时，会告诉你哪个限制被触发了，以及retry-after建议等多久。
+
+429错误主要有三种情况。
+
+**RPM超限**：你发请求太快了，超过了每分钟请求数。
+
+**ITPM超限**：你的prompt tokens太多，超过了每分钟输入token数。
+
+**OTPM超限**：Claude生成的tokens太多，超过了每分钟输出token数。
+
+429错误的响应会告诉你具体是哪个限制，比如：
+
+```json
+{
+  "error": {
+    "type": "rate_limit_error",
+    "message": "This request would exceed your organization's rate limit of 50 requests per minute. Please try again later."
+  }
+}
+```
+
+response header里有个retry-after字段，告诉你建议等多少秒。
+
+### retry-after为什么不准？
+
+很多人吐槽retry-after不准。明明说等60秒，等了60秒再发还是429。
+
+原因是Token Bucket的动态性。retry-after告诉你的是"等多久桶里会有1个token"，但不是"等多久桶会满"。
+
+如果你要发10个请求，retry-after说60秒，那是说60秒后你能发1个请求。但你要发10个，可能要等更久。
+
+另外，retry-after是估算值，不是精确值。因为桶的补充是连续的，系统只能给个大概时间。
+
+### 正确的重试策略
+
+标准做法是指数退避（Exponential Backoff）。
+
+第一次遇到429，等1秒重试。如果还是429，等2秒。再429，等4秒。最多等到64秒或128秒。
+
+代码示例：
+
+```python
+import time
+
+def call_claude_with_retry(prompt, max_retries=5):
+    for attempt in range(max_retries):
+        try:
+            response = client.messages.create(...)
+            return response
+        except anthropic.RateLimitError as e:
+            if attempt == max_retries - 1:
+                raise
+            wait_time = 2 ** attempt  # 1, 2, 4, 8, 16...
+            print(f"Rate limited, waiting {wait_time}s")
+            time.sleep(wait_time)
+```
+
+有人实测，指数退避能把429错误率降低95%。
+
+### request-id的追踪价值
+
+每个API响应都有个request-id header，这是调试的关键。
+
+如果你遇到奇怪的错误，比如429一直重试不成功，或者500错误，记录request-id，联系Anthropic支持时提供这个ID，他们能快速定位问题。
+
+request-id是全局唯一的，能精确追踪到某个具体请求的服务器处理日志。
+
+---
+
+## 其他常见错误码
+
+除了429，还有几个常见错误码。
+
+500是api_error，表示Anthropic服务器出问题了。这个错误你控制不了，只能重试。一般是临时性的，过几秒或几分钟就恢复了。如果持续出现500，可能是Anthropic服务故障，可以去status.anthropic.com查看服务状态。
+
+529是overloaded_error，表示服务器负载太高。这个跟429不同，429是你的账户超限，529是整个服务过载。遇到529，最好等久一点再重试，比如几分钟。因为这时候服务器已经在高负载状态，你马上重试只会加重负载。
+
+400是invalid_request_error，你的请求格式不对。401是authentication_error，API key无效。403是permission_error，你的key没有权限访问某个模型或功能。这些错误不用重试，要检查代码逻辑。
+
+---
+
+## 快速解答
+
+到这里这篇文章就结束了，关于开篇提到的5个问题，你应该有答案了。
+
+Token Bucket算法的运作方式是**持续补充容量，而不是固定时间重置**。你的桶容量上限是速率限制（比如50 RPM），每次请求消耗token，桶按固定速率补充token（比如每秒0.83个）。这跟传统的"每分钟重置"完全不同。如果你第1分钟用完50个token，要等约60秒才能完全恢复，而不是到下一分钟立刻重置。这个设计是为了防止突发流量对服务器造成压力。
+
+RPM、ITPM、OTPM是三个独立的桶，**任何一个空了请求就会被拒绝**。实际使用中，ITPM和OTPM更容易超。比如Tier 1的Sonnet 3.5，RPM是50，但ITPM只有40K。如果你每个请求2000 tokens，20个请求就用完ITPM了，RPM还剩30个。所以瓶颈往往是tokens而不是请求数。
+
+从Tier 1升到Tier 2需要**充值$40并保持余额至少7天**。不是充值立刻升级，要连续7天余额不低于$40，系统才会自动升级。这个设计防止刷等级。Tier 2的限制是1000 RPM和40K-100K ITPM，相比Tier 1提升了20倍。Tier 3要$200保持7-14天，Tier 4要$400。
+
+429错误的retry-after header有时不准，是因为**它告诉你的是等多久有1个token，而不是等多久桶会满**。如果你要发10个请求，retry-after说60秒，那是说60秒后你能发1个请求，而不是10个。正确的做法是指数退避：第一次等1秒，第二次等2秒，第三次等4秒。有人实测这个策略能把429错误率降低95%。
+
+Prompt Caching的读取tokens不计入ITPM，这意味着**如果你80%的tokens走缓存，ITPM限制相当于提升5倍**。比如你之前每分钟只能处理20个请求（因为ITPM限制），现在能处理100个。但前提是你的RPM限制得够。如果你还在Tier 1，RPM只有50，即使ITPM够用，也发不了100个请求。这个优化从Claude 3.7 Sonnet开始生效。
+
+---
+
+## 深入交流
+
+想要深入交流AI实践经验？欢迎关注，一起探讨AI时代的无限可能！
+
+---
+
+> ### 关于本人 ｜ 黄彦湘
+> 深耕互联网行业9年，专注前端开发技术方向，现为广州执业律师，同时兼备专利代理师资质。基于丰富的技术背景和法律实践经验，现为深度实践（Deepractice）社区核心贡献者，致力于推动AI深度实践在法律、小说创作等多元领域的创新应用与探索。
+> **全网同名**：明易AI实践
+
+---
