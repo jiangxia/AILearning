@@ -39,7 +39,13 @@
       "Read(//Users/huangyanxiang/.promptx/resource/role/bangu/**)",
       "Read(//Users/huangyanxiang/.promptx/resource/role/yanruyu/execution/**)",
       "Read(//Users/huangyanxiang/.promptx/resource/role/yanruyu/**)",
-      "Read(//Users/huangyanxiang/Desktop/黄明易/1、项目/AI学习/promptx/packages/resource/resources/role/sean/**)"
+      "Read(//Users/huangyanxiang/Desktop/黄明易/1、项目/AI学习/promptx/packages/resource/resources/role/sean/**)",
+      "WebFetch(domain:platform.openai.com)",
+      "WebFetch(domain:www.npmjs.com)",
+      "Bash(lsof:*)",
+      "Bash(python3:*)",
+      "Bash(head:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []
